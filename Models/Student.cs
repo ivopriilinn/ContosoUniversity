@@ -7,7 +7,11 @@ namespace ContosoUniversity.Models
     public class Student
     {
         public int ID { get; set; }
+        [StringLength(50)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
         public string LastName { get; set; }
+        [StringLength(50)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z]*$")]
         public string FirstMidName { get; set; }
 
         [DataType(DataType.Date)]
