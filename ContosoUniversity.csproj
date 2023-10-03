@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Instructors.cs" />
-    <Compile Remove="Controllers\InstructorsController.cs" />
   </ItemGroup>
 
   <ItemGroup>
