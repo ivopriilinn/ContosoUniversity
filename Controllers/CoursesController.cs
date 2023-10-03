@@ -20,16 +20,16 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Courses
-        public async Task<IActionResult> Index()
-        {
-			public async Task<IActionResult> Index()
-			{
-				var courses = _context.Courses
-					.Include(c => c.Department)
-					.AsNoTracking();
-				return View(await courses.ToListAsync());
-			}
-		}
+        
+        
+	    public async Task<IActionResult> Index()
+	    {
+		    var courses = _context.Courses
+			    .Include(c => c.Department)
+			    .AsNoTracking();
+		    return View(await courses.ToListAsync());
+	    }
+		
 
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
