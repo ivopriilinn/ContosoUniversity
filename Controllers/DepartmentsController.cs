@@ -174,7 +174,7 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Departments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool? concurrencyError)
         {
             if (id == null)
             {
@@ -183,10 +183,25 @@ namespace ContosoUniversity.Controllers
 
             var department = await _context.Departments
                 .Include(d => d.Administrator)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
             if (department == null)
             {
+                if (concurrencyError.GetValueOrDefault())
+                {
+                    return RedirectToAction(nameof(Index));
+                }
                 return NotFound();
+            }
+
+            if (concurrencyError.GetValueOrDefault())
+            {
+                ViewData["ConcurrencyErrorMessage"] = "The record you attempted to delete "
+                    + "was modified by another user after you got the original values. "
+                    + "The delete operation was canceled and the current values in the "
+                    + "database have been displayed. If you still want to delete this "
+                    + "record, click the Delete button again. Otherwise "
+                    + "click the Back to List hyperlink.";
             }
 
             return View(department);
