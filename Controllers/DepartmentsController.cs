@@ -208,19 +208,24 @@ namespace ContosoUniversity.Controllers
         }
 
         // POST: Departments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(Department department)
         {
-            var department = await _context.Departments.FindAsync(id);
-            _context.Departments.Remove(department);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool DepartmentExists(int id)
-        {
-            return _context.Departments.Any(e => e.DepartmentID == id);
+            try
+            {
+                if (await _context.Departments.AnyAsync(m => m.DepartmentID == department.DepartmentID))
+                {
+                    _context.Departments.Remove(department);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction(nameof(Delete), new { concurrencyError = true, id = department.DepartmentID });
+            }
         }
     }
 }
